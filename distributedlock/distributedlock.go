@@ -43,7 +43,7 @@ func (dl *DistributedLock) SyncLock(keyName string) bool {
 		if dl.Lock(keyName) {
 			return true
 		}
-		time.Sleep(time.Duration(vatools.CRnd(1000, 10000)) * time.Microsecond)
+		time.Sleep(time.Duration(vatools.CRnd(2000, 20000)) * time.Microsecond)
 	}
 	// 在指定等待时间内没有获取需要的分布锁退出
 	return false

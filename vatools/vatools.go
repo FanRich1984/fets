@@ -14,8 +14,7 @@ import (
 	"time"
 )
 
-//	获取指定数值范围的随机值
-//  var tr = rand.New(rand.NewSource(time.Now().UnixNano()))
+// 获取指定数值范围的随机值
 const (
 	TIME_FORMAT = "2006-01-02 15:04:05"
 )
@@ -35,17 +34,19 @@ func CRnd(min, max int) int {
 	return res
 }
 
-//	判断是否是有效的帐号ID
-//  字母开头，允许5-16字节，允许字母数字下划线
-//		有效返回 true
+// 判断是否是有效的帐号ID
+//
+//	 字母开头，允许5-16字节，允许字母数字下划线
+//			有效返回 true
 func CheckIsUID(uid string) bool {
 	res, _ := regexp.MatchString("^[a-zA-Z][a-zA-Z0-9_]{2,16}$", uid)
 	return res
 }
 
-//	是否是有效的中文英文数字名称
-//	中文、英文、数字及下划线
-//		有效返回 true
+// 是否是有效的中文英文数字名称
+// 中文、英文、数字及下划线
+//
+//	有效返回 true
 func CheckIsName(name string) bool {
 	res, _ := regexp.MatchString("^[\u4e00-\u9fa5a-zA-Z][\u4e00-\u9fa5_a-zA-Z0-9]{0,10}$", name)
 	return res
@@ -53,18 +54,25 @@ func CheckIsName(name string) bool {
 
 // 是否是有效的密码格式
 // 只能包含下划线字母和数字
-//    有效返回 true
+//
+//	有效返回 true
 func CheckIsPass(pass string) bool {
 	res, _ := regexp.MatchString("^[_a-zA-Z0-9]{3,20}$", pass)
 	return res
 }
 
 // 通过MD5加密对象
+//
 //	输入需要加密的字符串，输出加密后的字符信息
 func MD5(str string) string {
 	c := md5.New()
 	c.Write([]byte(str))
 	return hex.EncodeToString(c.Sum(nil))
+}
+
+// 加密成MD5并以大写返回加密值
+func BMD5(str string) string {
+	return strings.ToUpper(MD5(str))
 }
 
 func SUint(val string) uint {
@@ -173,6 +181,7 @@ func MapToJson(mpInfo map[string]interface{}) string {
 	return string(btInfo)
 }
 
+// 将json转为map[string]interface{}对象
 func JsonToMap(strJson string) map[string]interface{} {
 	var res map[string]interface{}
 	err := UnJson(strJson, &res)
@@ -191,7 +200,9 @@ func Json(source interface{}) (string, error) {
 }
 
 func UnJson(strJson string, sTypeOB interface{}) error {
-	return json.Unmarshal([]byte(strJson), &sTypeOB)
+	d := json.NewDecoder(strings.NewReader(strJson))
+	d.UseNumber()
+	return d.Decode(&sTypeOB)
 }
 
 // 获取当前目录

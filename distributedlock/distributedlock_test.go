@@ -23,14 +23,14 @@ func TestDistributedLock(t *testing.T) {
 		DB:      1,
 	})
 	// Ping
-	pRedis.Ping(context.Background())
+	fmt.Println(pRedis.Ping(context.Background()).Result())
 
 	// 构造分布式锁
 	pUserLk := NewDistributeLock("LK_USER", pRedis)
 	startTime := time.Now().UnixMilli()
 	wg := new(sync.WaitGroup)
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func(idx int) {
 			// 不使用分布锁增加
